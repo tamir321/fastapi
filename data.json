@@ -1,5 +1,4 @@
-[{"name": "jnk", "price": 7.0, "is_offer": true},
-{"name": "jnk1", "price": 8.0, "is_offer": true},
-{"name": "jnk2", "price": 9.0, "is_offer": true},
-{"name": "jnk3", "price": 6.0, "is_offer": true},
-{"name": "jnk4", "price": 5.0, "is_offer": true}]
+[{"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/1", "type": "get"},"expected":{"name": "doggie","status": "sold"}},
+  {"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/2", "type": "get"},"expected":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}},
+{"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/3", "type": "get"},"expected":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}}
+]
