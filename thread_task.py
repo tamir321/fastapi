@@ -2,8 +2,17 @@ from time import sleep
 from threading import Thread
 import settings
 from  API.APIs import APIs
+from prometheus_client import Counter
+
 from collections import deque
 import compare
+import logging
+
+logger = logging.getLogger('root')
+connection_fail_counter = Counter('fail_to_connect', 'fail to connect to server ')
+request_counter = Counter('my_failures', 'Description of counter')
+compare_fail_counter = Counter('my_failures', 'Description of counter')
+
 
 # task that runs at a fixed interval
 def background_task(interval_sec):
@@ -14,18 +23,24 @@ def background_task(interval_sec):
         sleep(interval_sec)
         # perform the task
         get_pet = APIs('https://petstore3.swagger.io/api/v3')
+
         for req in my_req:
             res = get_pet.get(req["request"]["path"])
-            print(f"res = {res} with type {type(res)}")
-            print(f'expected = {req["expected"]} with type {type(req["expected"])}')
+            request_counter.inc()
             if isinstance(res, int):
-                print("INTTTTTTTTTTTTT")
-                pass
+                connection_fail_counter.inc()
+                logger.error(f"result is not 200 {res} ")
+                save_test_result(req,"Fail to connect to server",False)
             else:
-                print("I was here")
-                if compare.compare(req["expected"],res):
-                    print("YYYYYY")
-            settings.deq.append(res)
+                if compare.compare_arr(req["expected"],res):
+                    logger.debug("result as expected")
+                    save_test_result(req, "OK", True)
+                else:
+                    message = f'expected - {req["expected"]} to be equal to {res}'
+                    logger.error(message)
+                    save_test_result(req, message, False)
+                    compare_fail_counter.inc()
+            settings.deq_raw.append(res)
 
         #global stop_threads
         if settings.stop_threads:
@@ -35,6 +50,12 @@ def start_req():
     print('Starting background task...')
     daemon = Thread(target=background_task, args=(10,), daemon=True, name='Background')
     daemon.start()
+
+def save_test_result(req,result,test_pass):
+    r= "Pass"
+    if not test_pass:
+        r = "fail"
+    settings.deq_result.append({"req":req["request"],"result":result,"pass/fail":r})
 
 # #stop_threads = False
 # # create and start the daemon thread

@@ -2,11 +2,15 @@ import json
 from typing import Union, List
 from fastapi import FastAPI
 from models.item import Item
+from prometheus_client import start_http_server
 import settings
 import thread_task
+import log
 
 settings.init()
-
+logger = log.setup_custom_logger('root')
+logger.debug('main message')
+start_http_server(5000)
 app = FastAPI()
 
 a = []
@@ -57,5 +61,9 @@ def update_item(item_id: int, item: Item):
     return {"item_name": item.name, "item_id": item_id}
 
 @app.get("/results")
-def get_results():
-    return settings.deq
+def get_bit_results():
+    return settings.deq_raw
+
+@app.get("/process")
+def get_bit_process_results():
+    return settings.deq_result
