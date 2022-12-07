@@ -10,8 +10,8 @@ import logging
 
 logger = logging.getLogger('root')
 connection_fail_counter = Counter('fail_to_connect', 'fail to connect to server ')
-request_counter = Counter('my_failures', 'Description of counter')
-compare_fail_counter = Counter('my_failures', 'Description of counter')
+request_counter = Counter('request_counter', 'Description of counter')
+compare_fail_counter = Counter('compare_fail_counter', 'Description of counter')
 
 
 # task that runs at a fixed interval
@@ -22,10 +22,11 @@ def background_task(interval_sec):
         # block for the interval
         sleep(interval_sec)
         # perform the task
-        get_pet = APIs('https://petstore3.swagger.io/api/v3')
+        #session = APIs('https://petstore3.swagger.io/api/v3')
 
         for req in my_req:
-            res = get_pet.get(req["request"]["path"])
+            #res = session.get(req["request"]["path"])
+            res = request(req["request"])
             request_counter.inc()
             if isinstance(res, int):
                 connection_fail_counter.inc()
@@ -56,6 +57,15 @@ def save_test_result(req,result,test_pass):
     if not test_pass:
         r = "fail"
     settings.deq_result.append({"req":req["request"],"result":result,"pass/fail":r})
+
+#{"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/1", "type": "get"}
+def request(req):
+    session = APIs(req["url"])
+    if req["type"] == "get":
+        return session.get(req["path"])
+    if req["type"] == "post":
+        return session.post(req["path"],req["data"])
+
 
 # #stop_threads = False
 # # create and start the daemon thread

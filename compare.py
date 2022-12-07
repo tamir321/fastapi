@@ -1,6 +1,5 @@
 def compare(expected, actual):
     if type(expected) == dict:
-        print("dict")
         for att, val in expected.items():
             if att in actual:
                 if actual[att] != val:
@@ -21,7 +20,6 @@ def compare(expected, actual):
 def compare_arr(expected, actual):
     results = []
     if type(expected) == list:
-        print("list")
         if len(expected) != len(actual):
             print(f"expect to get {len(expected)} actual size {len(actual)}")
             return False
