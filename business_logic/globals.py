@@ -1,9 +1,5 @@
 from collections import deque
 
-# global requests_list  # move to
-# global stop_threads
-# global deq_raw
-# global deq_result
 
 def init():
     global requests_list # move to
