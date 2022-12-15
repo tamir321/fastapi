@@ -1,4 +1,0 @@
-[{"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/1", "type": "get"},"expected":{"name": "doggie","status": "sold"}},
-  {"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/2", "type": "get"},"expected":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}},
-{"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/3", "type": "get"},"expected":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}}
-]

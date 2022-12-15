@@ -1,0 +1,16 @@
+<script>
+		var t = document.getElementById('info-table');
+		if(t) {
+			Array.from(t.rows).forEach((tr, rowIdx) => {
+				Array.from(tr.cells).forEach((cell, cellIdx) => {
+					if (cell.innerText == 'Fail') {
+						cell.style.backgroundColor = 'RGBA(255,0,0,1)';
+					}else if (cell.innerText == 'Pass') {
+						cell.style.backgroundColor = 'RGBA(0, 255, 71, 0.5)';
+					}
+				});
+			});
+		}
+
+
+  </script>

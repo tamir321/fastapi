@@ -1,5 +1,5 @@
 [
-{"id": 1,"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/1", "type": "get"},"expected":{"name": "doggie","status": "sold"}},
-{"id": 2,"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/2", "type": "get"},"expected":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}},
-{"id": 3,"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/3", "type": "get"},"expected":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}}
+{"id": 1,"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/1", "type": "get"},"expected":{"status":200,"data":{"name": "doggie","status": "sold"}}},
+{"id": 2,"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/2", "type": "get"},"expected":{"status":200,"data":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}}},
+{"id": 3,"request":{"url": "https://petstore3.swagger.io/api/v3", "path": "pet/3", "type": "get"},"expected":{"status":200,"data":{"name": "Gatitotototo","category": {"id": 2, "name": "Chaucito"}}}}
 ]

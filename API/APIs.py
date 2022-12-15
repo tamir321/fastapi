@@ -3,7 +3,7 @@ import json
 
 
 class APIs:
-    def __init__(self, base_url="https://petstore3.swagger.io/api/v3"):
+    def __init__(self, base_url):
         self.base_url = base_url
         self.headrs = {'accept': 'application/json'}
         self.session = requests.session()
