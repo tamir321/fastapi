@@ -1,6 +1,6 @@
 import json
 from typing import Union, List
-from fastapi import FastAPI ,HTTPException
+from fastapi import FastAPI ,HTTPException,Body
 from fastapi.responses import HTMLResponse
 from models.test import Test
 from models.server import Interval
@@ -57,10 +57,22 @@ def get_bit_process_results():
 def get_request_list():
     return globals.requests_list
 
+@app.put("/requests",response_model=List[Test],tags=["Requests"])
+def add_new_or_edit_request(request: Test):
+    req = json.loads(request.json())
+    globals.requests_list = list(filter(lambda x: x["id"] != req["id"], globals.requests_list))
+    globals.requests_list.append(req)
+    return globals.requests_list
+
 @app.get("/request/{id}",response_model=List[Test],tags=["Requests"])
 def get_request_by_id(item_id: int):
     result = list(filter(lambda x: x["id"] == item_id, globals.requests_list))
     return result
+
+@app.delete("/request/{id}",response_model=List[Test],tags=["Requests"])
+def delete_request_by_id(item_id: int):
+    globals.requests_list = list(filter(lambda x: x["id"] != item_id, globals.requests_list))
+    return globals.requests_list
 
 @app.get("/server/stop/{Are_you_sure}",tags=["Server"])
 def stop_server(Are_you_sure: str):
@@ -94,7 +106,7 @@ def update_server_interval_minutes(inter: Interval):
         )
 
 #TODO: add request update/delete
-#TODO: add read from env
+
 
 # @app.get("/jnk/",response_model=List[Item])
 # def read_root():

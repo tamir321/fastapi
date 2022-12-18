@@ -1,4 +1,5 @@
 from collections import deque
+import os
 
 
 def init():
@@ -10,9 +11,14 @@ def init():
     stop_threads = False
     requests_list = []
     stop_threads = False
-    deq_raw = deque(maxlen=10)  # get from env
-    deq_result = deque(maxlen=10)  # get from env
-    interval = 60
+    deq_raw = deque(maxlen=get_env('result_size',30))  # get from env
+    deq_result = deque(maxlen=get_env('result_size',30))  # get from env
+    interval = get_env('interval',600)
+
+
+def get_env(env_key: str , default):
+    return os.getenv(env_key) or default
+
 
 def __str__(self):
     return "representation"
