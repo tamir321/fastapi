@@ -8,12 +8,14 @@ def init():
     global deq_raw
     global deq_result
     global interval
+    global loop_id
     stop_threads = False
     requests_list = []
     stop_threads = False
     deq_raw = deque(maxlen=get_env('result_size',30))  # get from env
     deq_result = deque(maxlen=get_env('result_size',30))  # get from env
     interval = get_env('interval',600)
+    loop_id = 100000
 
 
 def get_env(env_key: str , default):

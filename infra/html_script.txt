@@ -8,9 +8,13 @@
 					}else if (cell.innerText == 'Pass') {
 						cell.style.backgroundColor = 'RGBA(0, 255, 71, 0.5)';
 					}
+					else if (cell.innerText.startsWith('Total')) {
+						tr.style.backgroundColor = 'RGBA(0, 103, 186, 0.42)';
+					}
 				});
 			});
 		}
 
 
   </script>
+
