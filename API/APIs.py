@@ -20,3 +20,6 @@ class APIs:
         if res.status_code == expected_status:
             return res.json()
         return res.status_code
+
+    def close(self):
+        self.session.close()

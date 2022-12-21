@@ -22,5 +22,3 @@ def get_env(env_key: str , default):
     return os.getenv(env_key) or default
 
 
-def __str__(self):
-    return "representation"

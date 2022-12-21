@@ -1,16 +1,14 @@
-from time import sleep ,time ,ctime
+from time import sleep, time, ctime
 from threading import Thread
 from business_logic import globals
 from API.APIs import APIs
-from prometheus_client import Counter
+# from prometheus_client import Counter
 from business_logic import compare
 from infra import logger
 from datetime import datetime
+from business_logic.counters import *
 
 logger = logger.setup_custom_logger('root')
-connection_fail_counter = Counter('fail_to_connect', 'fail to connect to server ')
-request_counter = Counter('request_counter', 'Description of counter')
-compare_fail_counter = Counter('compare_fail_counter', 'Description of counter')
 
 
 # task that runs at a fixed interval
@@ -36,10 +34,11 @@ def singl_test(test_id: int):
     test(req)
 
 
+@REQUESTS_TIME.time()
 def test(my_req, initiator="Auto"):
     globals.loop_id += 1
     start = time()
-    tests=0
+    tests = 0
     pass_test = 0
     for req in my_req:  # settings.requests_list
         tests += 1
@@ -63,8 +62,11 @@ def test(my_req, initiator="Auto"):
                 compare_fail_counter.inc()
         globals.deq_raw.append(res)
     end = time()
-    save_test_result({"request": f"started at {ctime(start)} ended at {ctime(end)} duration [sec] {end-start}"},f"Total requests={tests}  Pass-{pass_test} Failed-{tests-pass_test}",tests==pass_test,initiator)
-    return start-end
+    save_test_result({"request": f"started at {ctime(start)} ended at {ctime(end)} duration [sec] {end - start}"},
+                     f"Total requests={tests}  Pass-{pass_test} Failed-{tests - pass_test}", tests == pass_test,
+                     initiator)
+    return start - end
+
 
 def save_test_result(req, result, test_pass, initiator="Auto"):
     r = "Pass"
@@ -73,15 +75,18 @@ def save_test_result(req, result, test_pass, initiator="Auto"):
         r = "Fail"
     if "request" in req.keys():
         message = req["request"]
-    globals.deq_result.append(
-        {"Time":{"Time": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),"Interaction":globals.loop_id}, "req": message, "result": result, "pass/fail": r,
-         "Initiator": initiator})
+    summery = {"Time": {"Time": datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "Interaction": globals.loop_id},
+               "req": message, "result": result, "pass/fail": r,
+               "Initiator": initiator}
+    globals.deq_result.append(summery)
+    logger.info(summery)
 
 
 def request(req, expected_status=200):
     session = APIs(req["url"])
     if req["type"] == "get":
-        return session.get(path=req["path"], expected_status=expected_status)
+        res = session.get(path=req["path"], expected_status=expected_status)
     if req["type"] == "post":
-        return session.post(path=req["path"], body=["data"], expected_status=expected_status)
-
+        res = session.post(path=req["path"], body=["data"], expected_status=expected_status)
+    session.close()
+    return res
